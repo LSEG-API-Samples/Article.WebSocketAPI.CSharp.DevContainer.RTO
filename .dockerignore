@@ -1,0 +1,6 @@
+.devcontainer/.env.devcontainer
+shareFolder/
+*.md
+.git/
+images/
+.gitignore
