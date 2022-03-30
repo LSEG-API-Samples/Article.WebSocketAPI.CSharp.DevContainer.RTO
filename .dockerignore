@@ -1,4 +1,5 @@
 .devcontainer/.env.devcontainer
+.devcontainer/.env.devcontainer.example
 shareFolder/
 *.md
 .git/
