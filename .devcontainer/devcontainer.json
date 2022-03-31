@@ -4,7 +4,6 @@
     "name": "WebSocket_dotNet",
     "build": {"dockerfile": "Dockerfile"},
     "runArgs": [
-        "--init",
         "--env-file=.devcontainer/.env.devcontainer"
     ],
     "extensions": ["ms-dotnettools.csharp"],
