@@ -84,7 +84,7 @@ Please find more details about all devcontainer.json configuration parameters on
 
 ## <a id="devcontainer_dockerfile"></a>A Dockerfile
 
-The refinitivapis/websocket_api Docker Image has the Python runtime and dependencies pre-installed for the Python WebSocket examples. However, it is based on the Linux OS Image, so we can build a new Docker Image on top of it and install compilers, SDKs, or runtime for the other WebSocket examples.
+The refinitivapis/websocket_api Docker Image has the Python runtime and dependencies pre-installed for the Python WebSocket examples. However, it is based on the Linux OS Image, so we can build a new Docker image on top of it and install compilers, SDKs, or runtime for the other WebSocket examples.
 
 A Dockerfile for the RTO C# WebSocket examples is as follows:
 
@@ -133,13 +133,13 @@ Then, we set this ```.env.devcontainer``` file to Docker on runtime with the dev
 
 You **should not** share this ```.env.devcontainer``` file to your peers or commit/push it to the version control. You should add the file to the ```.gitignore``` file to avoid adding it to version control or public repository accidentally.
 
-You can create a ```.env.devcontainer.example``` file as a template for environment variables  file sharing. The file has the same parameters' keys as a ```.env.devcontainer``` file but without sensitive values.
+You can create a ```.env.devcontainer.example``` file as a template for environment variables file sharing. The file has the same parameters' keys as a ```.env.devcontainer``` file but without sensitive values.
 
 ## <a id="devcontainer_launchfile"></a>Launch and Tasks Configurations files
 
 VS Code has built-in debugging support for various programming languages. Developers can configure and save their debugging setup detail in a lunch configuration file named ```launch.json``` located in a ```.vscode``` folder of the workspace (project root folder). 
 
-To set a devcontainer to run and debug the MarketPriceRdpGwServiceDiscoveryExample application with the .NET Core runtime, I am setting a launch.json configurations as follows:
+To set a devcontainer to run and debug the MarketPriceRdpGwServiceDiscoveryExample application with the .NET Core runtime, I am setting a launch.json configuration as follows:
 
 ```
 {
@@ -158,22 +158,16 @@ To set a devcontainer to run and debug the MarketPriceRdpGwServiceDiscoveryExamp
             "program": "${workspaceFolder}/MarketPriceRdpGwServiceDiscoveryExample/bin/Debug/netcoreapp2.1/MarketPriceRdpGwServiceDiscoveryExample.dll",
             "args": ["--user","${env:RTO_USERNAME}","--password","${env:RTO_PASSWORD}","--clientid","${env:RTO_CLIENTID}","--ric","/EUR="],
             "cwd": "${workspaceFolder}/MarketPriceRdpGwServiceDiscoveryExample",
-            // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
-            "console": "internalConsole",
-            "stopAtEntry": false
+            ...
         },
-        {
-            "name": ".NET Core Attach",
-            "type": "coreclr",
-            "request": "attach"
-        }
+        ...
     ]
 }
 ```
 
 Please noticed that the ```args``` attribute has been set with the ```["--user","${env:RTO_USERNAME}","--password","${env:RTO_PASSWORD}","--clientid","${env:RTO_CLIENTID}","--ric","/EUR="]``` value. This setting makes VS Code automatic passes the RTO credentials in a devcontainer's environment variables to the MarketPriceRdpGwServiceDiscoveryExample command line options. Developers do not need to manual paste their credentials in a devcontainer anymore.
 
-Developers can save their building, packaging, testing, or deploying steps in a tasks configuration file named ```tasks.json``` located in a ```.vscode``` folder of the workspace (project root folder). A tasks.json file for automatic builds of the RTO C# WebSocket CSharpRdpGwExamples_VS150 solution (both ) with the following configurations:
+Developers can save their building, packaging, testing, or deploying steps in a tasks configuration file named ```tasks.json``` located in a ```.vscode``` folder of the workspace (project root folder). A tasks.json file for automatic builds of the RTO C# WebSocket CSharpRdpGwExamples_VS150 solution with the following configurations:
 
 ```{
     "version": "2.0.0",
@@ -200,13 +194,120 @@ We mount this ```.vscode``` folder to a Docker Container with the devcontainer.j
 Please find more detail about VS Code Debugging and Tasks configurations from the following resources:
 - [VS Code: Debugging User Guide](https://code.visualstudio.com/docs/editor/debugging).
 - [VS Code: Integrate with External Tools via Tasks](https://code.visualstudio.com/docs/editor/tasks).
+- [Configuring launch.json for C# debugging](https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md).
+- [Console (terminal) window setting](https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md#console-terminal-window).
 
 ### <a id="start_dev_container"></a>Running the Development Container
 
-**Docker Desktop/engine should be running prior to the next step.**
+**Docker Desktop/engine should be running before the next step.**
 
 You can connect to the container and start developing within it by selecting the **Remote-Containers: Reopen in Container** command from the VS Code Command Palette (F1).
 
+![figure-3](images/03_reopen_in_container_1.png "Reopen in Container  menu 1")
+
+Alternatively, the VS Code can detect whether there is a folder containing a Dev container configuration file, and then asks you if you want to reopen the folder in a container.
+
+![figure-4](images/04_reopen_in_container_2.png "Reopen in Container  menu 2")
+
+Next, the VS Code window (instance) reloads and builds a Docker image from a Dockerfile, then starts a devcontainer. Please note that if the image is already built, the process will be faster.
+
+![figure-5](images/05_pulling_container.png "Pull and Build dev container")
+
+There may be a message “There are unresolved dependencies. Please execute the restore command to continue” At this point. This message is generated from VS Code C# extension. Please click the Restore button.
+
+![figure-6](images/06_csharp.png "Restore dependencies")
+
+Once this build completes, VS Code automatically connects to the container at the path we set to the ```workspaceFolder``` property which is the **/opt/refinitiv/websocket-api/Applications/Examples/RDP/CSharp** folder.  You can check the VS Code Remote connection status from the button left toolbar.
+
+![figure-7](images/07_devcontainer_ready.png "DevContainer success")
+
+If you click this toolbar, VS Code shows the Container Remote connection menu options at the top of the editor.
+
+![figure-8](images/08_dev_container_menu.png "Dev Container menu")
+
+To close the remote connection, choose the "Close Remote Connection" from the drop-down menu. 
+
+### <a id="start_dev_container"></a>Running the MarketPrice RDP Service Discovery Example
+
+This devcontainer already has the C# extension built-in and VS Code's launch.json and tasks.json configurations files, developers can run the MarketPrice RDP Service Discovery Example (MarketPriceRdpGwServiceDiscoveryExample) by pressing the ```F5``` button or selecting *Run* then *Start Debugging* option from VS Code menu.
+
+![figure-9](images/09_run_example.png "Run example")
+
+
+VS Code automatic runs the MarketPriceRdpGwServiceDiscoveryExample application with the ```--user```, ```--password```, ```--clientid```, and ```--ric``` command-line options set in a launch.json file. All RTO credentials are available in the container environment variables, so developers do not need to manually set them. Developers can change the RIC code or add other options in the ```args``` attribute of a launch.json file. 
+
+```
+//launch.json file
+{
+    "version": "0.2.0",
+    "configurations": [
+
+        {
+           
+            "name": ".NET Core Launch (console)",
+            ...
+            "args": ["--user","${env:RTO_USERNAME}","--password","${env:RTO_PASSWORD}","--clientid","${env:RTO_CLIENTID}","--ric","/EUR="],
+            ...
+        },
+        ...
+    ]
+}
+```
+Please find more detail about other options in the solution readme file.
+
+Alternatively, developers can run the example in bash manually via the following steps:
+
+```
+$>dotnet build CSharpRdpGwExamples_VS150.sln
+
+$>cd MarketPriceRdpGwServiceDiscoveryExample/bin/Debug/netcoreapp2.1/
+
+$>dotnet MarketPriceRdpGwServiceDiscoveryExample.dll --user $RTO_USERNAME --password $RTO_PASSWORD --clientid $RTO_CLIENTID --ric <RIC Code>
+```
+
+### <a id="start_dev_container"></a>Bonus: Running the WebSocket Python examples
+
+This C# devcontainer is based on the refinitivapis/websocket_api Docker Image, so developers can run the Python WebSocket examples too.
+
+The steps to run the RTO Python WebSocket example are as follows:
+
+```
+$>cd /opt/refinitiv/websocket-api/Applications/Examples/RDP/python
+
+$> python market_price_rdpgw_service_discovery.py --user $RTO_USERNAME --password $RTO_PASSWORD --clientid $RTO_CLIENTID --ric <RIC Code>
+```
+
+##  <a id="project_files"></a>Project files
+This example project contains the following files and folders
+1. *.devcontainer/devcontainer.json*: An example devcontainer configuration file.
+2. *.devcontainer/Dockerfile*: An example Dockerfile.
+3. *.devcontainer/.env.devcontainer.example*: An example ```.env.devcontainer``` file.
+4. *.vscode*: VS Code debugging configurations for the RTO C# WebSocket example.
+5. *images*: Project images folder.
+6. *LICENSE.md*: Project's license file.
+7. *README.md*: Project's README file.
+8. *RTSDK_DevContainer.md.md*: Project's Document file.
+
+## <a id="how_to_run"></a>How to run the Examples
+
+The first step is to unzip or download the example project folder into a directory of your choice, then follow the steps below.
+
+1. Go to the project's *.devcontainer* folder and create a file name ```.env.devcontainer```  with the following content.
+    ```
+    RTO_USERNAME=<RTO Machine-ID>
+    RTO_PASSWORD=<RTO Password>
+    RTO_CLIENTID=<RTO AppKey>
+    ```
+2. Start a Docker desktop or Docker engine on your machine.
+3. Open the project folder in the VS Code editor
+4. Install the [VS Code - Remote Development extension pack](https://aka.ms/vscode-remote/download/extension).
+5. Open the VS Code Command Palette with the ```F1``` key, and then select the **Remote-Containers: Reopen in Container** command.
+
+![figure-3b](images/03_reopen_in_container_1.png "Reopen in Container  menu 1")
+
+Now VS Code is ready to run the RTO C# WebSocket devcontainer. 
+
+![running-demo](images/csharp_run_result.gif "Run example")
 
 ## <a id="ref"></a>References
 
