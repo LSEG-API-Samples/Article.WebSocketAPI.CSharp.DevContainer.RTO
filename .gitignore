@@ -1,5 +1,4 @@
 .devcontainer/.env.devcontainer
-shareFolder/*
 launch_example.json
 tasks_example.json
 run.txt
