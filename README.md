@@ -233,7 +233,6 @@ This devcontainer already has the C# extension built-in and VS Code's launch.jso
 
 ![figure-9](images/09_run_example.png "Run example")
 
-
 VS Code automatic runs the MarketPriceRdpGwServiceDiscoveryExample application with the ```--user```, ```--password```, ```--clientid```, and ```--ric``` command-line options set in a launch.json file. All RTO credentials are available in the container environment variables, so developers do not need to manually set them. Developers can change the RIC code or add other options in the ```args``` attribute of a launch.json file. 
 
 ```
@@ -265,7 +264,7 @@ $>cd MarketPriceRdpGwServiceDiscoveryExample/bin/Debug/netcoreapp2.1/
 $>dotnet MarketPriceRdpGwServiceDiscoveryExample.dll --user $RTO_USERNAME --password $RTO_PASSWORD --clientid $RTO_CLIENTID --ric <RIC Code>
 ```
 
-### <a id="start_dev_container"></a>Bonus: Running the WebSocket Python examples
+### <a id="run_python"></a>Bonus: Running the WebSocket Python examples
 
 This C# devcontainer is based on the refinitivapis/websocket_api Docker Image, so developers can run the Python WebSocket examples too.
 
@@ -309,15 +308,67 @@ Now VS Code is ready to run the RTO C# WebSocket devcontainer.
 
 ![running-demo](images/csharp_run_result.gif "Run example")
 
+## <a id="troubleshooting"></a>Troubleshooting
+
+**Question**: I do not have the RTO credentials.
+
+**Answer**: Please contact your Refinitiv representative to help you to access the RTO account and services.
+
+**Question**: When I select the *Remote-Containers: Reopen in Container* command, VS Code returns an error with **Docker returned an error. Make Sure the Docker daemon is running.** message.
+
+**Answer**: Please install and start a Docker desktop or Docker engine on your machine.
+
+**Question**: When I select the *Remote-Containers: Reopen in Container* command, VS Code returns an error with **Docker returned an error. Make Sure the Docker daemon is running.** message.
+
+**Answer**: Please install and start a Docker desktop or Docker engine on your machine.
+
+**Question**: VS Code throws an error with the **An error occurred setting up the container** message.
+
+![figure-10](images/10_building_error.png "Build Error")
+
+**Answer**: Please choose the *Open devcontainer.json Locally* option. Delete Docker container and images (named *vsc-XXX*), check the error log file, and restart the process.
+
+**Question**: VS Code throws an error and the log show **docker: open .devcontainer/.env.devcontainer: The system cannot find...* message.
+
+![figure-11](images/11_building_error.png "Build Error")
+
+**Answer**: This error message means you do not have a ```.dev.devcontainer``` environment variables file in the ```.devcontainer``` folder. Please create it using the template from a ```.dev.devcontainer.example``` file.
+
+## <a id="conclusion"></a>Conclusion and Next Steps
+
+Docker is an open containerization platform for developing, testing, deploying, and running any software application. It helps developers create a consistent development environment (aka devcontainer) without manually maintaining dependencies and toolsets for the project. The VS Code [Remote - Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) lets developers develop applications with a devcontainer using VS Code full-featured sets such as debugging and various extensions. This devcontainer is easy to set up and share among the project team. 
+
+This example project is just a brief introduction to the Remote - Containers extension. Developers can work with [Docker Compose](https://code.visualstudio.com/docs/remote/create-dev-container#_use-docker-compose) to build a customized Docker image that matches the development requirements, [debugging](https://code.visualstudio.com/docs/remote/containers#_debugging-in-a-container), install various VS Code extensions to use in the Dev Container (via the [GUI](https://code.visualstudio.com/docs/remote/containers#_managing-extensions) or [configuration file](https://code.visualstudio.com/docs/remote/containers#_adding-an-extension-to-devcontainerjson)), [clone Docker container from Git repository](https://code.visualstudio.com/docs/remote/containers#_quick-start-open-a-git-repository-or-github-pr-in-an-isolated-container-volume), [attach the VS Code to a running container](https://code.visualstudio.com/docs/remote/containers#_attach-to-existing-container), [port forwarding](https://code.visualstudio.com/docs/remote/containers#_always-forwarding-a-port), and much more. I highly recommend you check the following VS Code resources for more details:
+* [Developing inside a Container](https://code.visualstudio.com/docs/remote/containers)
+* [Remote development in Containers tutorial](https://code.visualstudio.com/docs/remote/containers-tutorial)
+* [Create a development container](https://code.visualstudio.com/docs/remote/create-dev-container)
+* [devcontainer.json reference](https://code.visualstudio.com/docs/remote/devcontainerjson-reference)
+
+
+The [refinitivapis/websocket_api](https://hub.docker.com/r/refinitivapis/websocket_api) Docker Image is a good starting point for developers who are new to the [Websocket API](https://developers.refinitiv.com/en/api-catalog/refinitiv-real-time-opnsrc/refinitiv-websocket-api)). Developers can use the Docker Image with the Remote - Containers extensions to set up a development environment, and run the Python WebSocket examples. Developers who are using other programming languages can install more compilers/runtime to run the WebSocket examples based on their preferred technology too.
+
+
 ## <a id="ref"></a>References
 
-* https://code.visualstudio.com/docs/remote/create-dev-container#_dockerfile
-* https://github.com/microsoft/vscode-remote-try-dotnetcore
-* https://code.visualstudio.com/docs/remote/devcontainerjson-reference
-* https://code.visualstudio.com/docs/editor/variables-reference
-* https://code.visualstudio.com/remote/advancedcontainers/environment-variables
-* https://kerkour.com/secure-programming-with-vscode-dev-containers
-* https://docs.docker.com/engine/reference/commandline/run/
-* https://developers.refinitiv.com/en/article-catalog/article/introduction-to-the-refinitivapis-websocketapi-docker-image
-* https://www.aaron-powell.com/posts/2021-03-08-your-open-source-project-needs-a-dev-container-heres-why/
-* https://docs.docker.com/engine/reference/builder/
+For further details, please review the following resources:
+* [Websocket API](https://developers.refinitiv.com/en/api-catalog/refinitiv-real-time-opnsrc/refinitiv-websocket-api) on the [Refinitiv Developer Community](https://developers.refinitiv.com/) website.
+* [Refinitiv Real-Time & Distribution Family page](https://developers.refinitiv.com/en/use-cases-catalog/refinitiv-real-time) page.
+* [Websocket API Quick Start](hhttps://developers.refinitiv.com/en/api-catalog/refinitiv-real-time-opnsrc/refinitiv-websocket-api/quick-start) page.
+* [Developer Article: 10 important things you need to know before you write an Enterprise Real Time application](https://developers.refinitiv.com/article/10-important-things-you-need-know-you-write-elektron-real-time-application) article.
+* [Introduction to the refinitivapis/websocket_api Docker Image](https://developers.refinitiv.com/en/article-catalog/article/introduction-to-the-refinitivapis-websocketapi-docker-image) article.
+* [VS Code: Developing inside a Container](https://code.visualstudio.com/docs/remote/containers) page.
+* [VS Code: Remote development in Containers tutorial](https://code.visualstudio.com/docs/remote/containers-tutorial) page.
+* [VS Code: Create a development container](https://code.visualstudio.com/docs/remote/create-dev-container) page.
+* [VS Code: devcontainer.json reference](https://code.visualstudio.com/docs/remote/devcontainerjson-reference) page.
+* [VS Code: Create a development container: Dockerfile](https://code.visualstudio.com/docs/remote/create-dev-container#_dockerfile) page.
+* [VS Code: Debugging and Task Variables reference](https://code.visualstudio.com/docs/editor/variables-reference) page.
+* [VS Code: Remote Development: Environment variables reference](https://code.visualstudio.com/remote/advancedcontainers/environment-variables) page.
+* [Try Out Development Containers: .NET Core](https://github.com/microsoft/vscode-remote-try-dotnetcore) page.
+* [Docker run reference](https://docs.docker.com/engine/reference/commandline/run/) page.
+* [Dockerfile reference](https://docs.docker.com/engine/reference/builder/) page.
+* [Setting up a VS Code Dev Container](https://benmatselby.dev/post/vscode-dev-containers/) blog post.
+* [Hands-On with VSCode & "Dev Containers"](https://dev.to/mcastellin/hands-on-with-vscode-dev-containers-33bf) blog post.
+* [Development Acceleration Through VS Code Remote Containers: An Introduction](https://stelligent.com/2020/03/20/development-acceleration-through-vs-code-remote-containers-an-introduction/) blog post.
+* [Secure and immutable development environments with Dev Containers](https://kerkour.com/secure-programming-with-vscode-dev-containers) blog post.
+
+For any questions related to this project or the WebSocket API page, please use the Developer Community [Q&A Forum](https://community.developers.refinitiv.com/spaces/152/websocket-api.html).
