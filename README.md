@@ -18,7 +18,7 @@ As part of the Remote Development Extension Pack, the [Remote - Containers](http
 
 ![figure-1](images/01_architecture-containers.png "Visual Studio Code Remote - Containers diagram")
 
-The previous [Article.RTSDK.Java.Cpp.DevContainer](https://github.com/Refinitiv-API-Samples/Article.RTSDK.Java.Cpp.DevContainer) project demonstrates how to use VS Code Remote - Containers extension with the Refinitiv Real-Time SDK Java/C++ Docker Images directly. This example project shows how to set up a [.NET](https://dotnet.microsoft.com/en-us/) (to be precisely, [.NET Core](https://github.com/dotnet/core)) VS Code devcontainer with the Remote - Containers extension to for the Refinitiv Real-Time Optimized (RTO) [C#](https://docs.microsoft.com/en-us/dotnet/csharp/) WebSocket examples [using a Dockerfile](https://code.visualstudio.com/docs/remote/create-dev-container#_dockerfile). This Dockerfile is built on top of the [refinitivapis/websocket_api](https://hub.docker.com/r/refinitivapis/websocket_api) Docker Image and developers can run the RTO C# WebSocket examples codes directly in VS Code.
+The previous [Article.RTSDK.Java.Cpp.DevContainer](https://github.com/Refinitiv-API-Samples/Article.RTSDK.Java.Cpp.DevContainer) project demonstrates how to use Refinitiv Real-Time SDK Java/C++ Docker Images devcontainer with VS Code Remote - Containers extension. This example project shows how to set up a [.NET](https://dotnet.microsoft.com/en-us/) (to be precisely, [.NET Core](https://github.com/dotnet/core)) devcontainer with the Remote - Containers extension to for the Refinitiv Real-Time Optimized (RTO) [C#](https://docs.microsoft.com/en-us/dotnet/csharp/) WebSocket examples [using a Dockerfile](https://code.visualstudio.com/docs/remote/create-dev-container#_dockerfile). This Dockerfile is built on top of the [refinitivapis/websocket_api](https://hub.docker.com/r/refinitivapis/websocket_api) Docker Image and developers can run the RTO C# WebSocket examples codes directly in VS Code.
 
 ## <a id="Introduction"></a>Refinitiv WebSocket API Introduction
 
@@ -40,6 +40,9 @@ This example requires the following dependencies software and libraries.
 5. Internet connection. 
 
 I highly recommend following [System requirements](https://code.visualstudio.com/docs/remote/containers#_system-requirements) and [Installation](https://code.visualstudio.com/docs/remote/containers#_installation) sections to set up your environment.
+
+Please contact your Refinitiv representative to help you to access the RTO account and services. You can find more detail regarding the RDP and RTO access credentials set up from the *Getting Started for Machine ID* section of the [Getting Start with Refinitiv Data Platform article](https://developers.refinitiv.com/en/article-catalog/article/getting-start-with-refinitiv-data-platform) article.  
+
 
 ## <a id="devcontainer_detail"></a>RTO C# devcontainer Detail
 

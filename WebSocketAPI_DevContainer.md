@@ -164,7 +164,7 @@ Please find more detail about VS Code Debugging and Tasks configurations from th
 - [Configuring launch.json for C# debugging](https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md).
 - [Console (terminal) window setting](https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md#console-terminal-window).
 
-### <a id="start_dev_container"></a>Running the Development Container
+## <a id="start_dev_container"></a>Running the Development Container
 
 **Docker Desktop/engine should be running before the next step.**
 
@@ -194,7 +194,7 @@ If you click this toolbar, VS Code shows the Container Remote connection menu op
 
 To close the remote connection, choose the "Close Remote Connection" from the drop-down menu. 
 
-### <a id="start_dev_container"></a>Running the MarketPrice RDP Service Discovery Example
+## <a id="start_dev_container"></a>Running the MarketPrice RDP Service Discovery Example
 
 This devcontainer already has the C# extension built-in and VS Code's launch.json and tasks.json configurations files, developers can run the MarketPrice RDP Service Discovery Example (MarketPriceRdpGwServiceDiscoveryExample) by pressing the ```F5``` button or selecting *Run* then *Start Debugging* option from VS Code menu.
 
@@ -231,7 +231,7 @@ $>cd MarketPriceRdpGwServiceDiscoveryExample/bin/Debug/netcoreapp2.1/
 $>dotnet MarketPriceRdpGwServiceDiscoveryExample.dll --user $RTO_USERNAME --password $RTO_PASSWORD --clientid $RTO_CLIENTID --ric <RIC Code>
 ```
 
-### <a id="run_python"></a>Bonus: Running the WebSocket Python examples
+## <a id="run_python"></a>Bonus: Running the WebSocket Python examples
 
 This C# devcontainer is based on the refinitivapis/websocket_api Docker Image, so developers can run the Python WebSocket examples too.
 
