@@ -40,7 +40,7 @@ The detail of the configurations above are:
 - ```name```: A display name for the container.
 - ```build```: The location of a [Dockerfile](https://docs.docker.com/engine/reference/builder/) that defines the contents of the container.
 - ```runArgs```: An array of [Docker CLI arguments](https://docs.docker.com/engine/reference/commandline/run/) that VS Code uses when running the container. I am setting the ```--env-file``` option that sets the container's environment variables via a file named *.env.devcontainer*.
-- ```extensions```: Specify VS Code extension IDs that will be installed inside the container.I am setting [C# extension for Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csharp).
+- ```extensions```: Specify VS Code extension IDs that will be installed inside the container. I am setting the [C# extension for Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csharp) here.
 - ```workspaceFolder```: Sets the default path that VS Code should open when connecting to the container. This devcontainer sets the default path to **/opt/refinitiv/websocket-api/Applications/Examples/RDP/CSharp** which is the RTO C# examples location in the container.
 - ```mounts```: Add mount points to the container when created for sharing files between the host and devcontainer. I am mounting the ```.vscode``` folder for the C# running/debugging configurations and the ```shareFolder``` to share files between host and devcontainer.
 - ```shutdownAction```: set the VS Code stops the container when the editor window is closed/shut down.
@@ -80,7 +80,7 @@ The above Dockerfile instructions do the following tasks.
 
 Please note that you can build and run this Dockerfile with the Docker engine CLI too.
 
-## <a id="devcontainer_envfile"></a>A Environment Variables file
+## <a id="devcontainer_envfile"></a>An Environment Variables file
 
 According to the methodology [3rd factor](https://12factor.net/config) of the [Twelve-Factor App methodology](https://12factor.net/), it is a good practice to keep configuration information and credentials as environment variables, then inject them into the application on runtime. 
 
