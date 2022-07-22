@@ -147,3 +147,8 @@ For further details, please review the following resources:
 * [Secure and immutable development environments with Dev Containers](https://kerkour.com/secure-programming-with-vscode-dev-containers) blog post.
 
 For any questions related to this project or the WebSocket API page, please use the Developer Community [Q&A Forum](https://community.developers.refinitiv.com/spaces/152/websocket-api.html).
+
+## Developers Articles
+
+* [Develop with Refinitiv WebSocket API Docker Image with C# in VS Code - using the Remote Containers extension](https://developers.refinitiv.com/en/article-catalog/article/develop-with-refinitiv-websocket-api-docker-with-csharp-in-vs-code) article.
+* [How to use WebSocket API Docker Image with C# in VS Code Using the Remote — Containers extension](https://wasin-waeosri.medium.com/how-to-use-websocket-api-docker-image-with-c-in-vs-code-using-the-remote-containers-extension-12e4e27a5570) Medium post.
