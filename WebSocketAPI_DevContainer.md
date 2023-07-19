@@ -1,6 +1,6 @@
 # Develop with Refinitiv WebSocket API Docker Image with C# in VS Code Using the Remote - Containers extension
-- version: 1.0.0
-- Last update: April 2022
+- version: 2.0
+- Last update: July 2023
 - Environment: Docker
 - Compiler: C#
 - Prerequisite: [Demo prerequisite](#prerequisite)
@@ -18,7 +18,7 @@ The main configuration file that tells VS Code how to access (or create) a devco
 
 Let me explain these configurations:
 
-```
+``` JSON
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
 // https://github.com/microsoft/vscode-dev-containers/tree/v0.202.5/containers/
 {
@@ -27,12 +27,20 @@ Let me explain these configurations:
     "runArgs": [
         "--env-file=.devcontainer/.env.devcontainer"
     ],
-    "extensions": ["ms-dotnettools.csharp"],
+    "customizations": {
+        "vscode": {
+            "extensions": ["ms-dotnettools.csharp"],
+            "settings": {
+                "omnisharp.useModernNet": false,
+                "omnisharp.sdkPath": "/usr/bin/dotnet"
+            }
+        }
+      },
     "workspaceFolder": "/opt/refinitiv/websocket-api/Applications/Examples/RDP/CSharp",
     "mounts": [
-        "source=${localWorkspaceFolder}/.vscode,target=${containerWorkspaceFolder}/.vscode,type=bind,consistency=cached",
+		"source=${localWorkspaceFolder}/.vscode,target=${containerWorkspaceFolder}/.vscode,type=bind,consistency=cached",
         "source=${localWorkspaceFolder}/shareFolder,target=${containerWorkspaceFolder}/shareFolder,type=bind,consistency=cached"
-    ],
+	],
     "shutdownAction":"stopContainer"
 }
 ```
@@ -40,7 +48,8 @@ The detail of the configurations above are:
 - ```name```: A display name for the container.
 - ```build```: The location of a [Dockerfile](https://docs.docker.com/engine/reference/builder/) that defines the contents of the container.
 - ```runArgs```: An array of [Docker CLI arguments](https://docs.docker.com/engine/reference/commandline/run/) that VS Code uses when running the container. I am setting the ```--env-file``` option that sets the container's environment variables via a file named *.env.devcontainer*.
-- ```extensions```: Specify VS Code extension IDs that will be installed inside the container. I am setting the [C# extension for Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csharp) here.
+- ```customizations.vscode.extensions```: Specify VS Code extension IDs that will be installed inside the container. I am setting the [C# extension for Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csharp) here.
+- ```customizations.vscode.settings```: Adds default settings.json values into a container/machine specific settings file. I am setting the C# extension configurations here.
 - ```workspaceFolder```: Sets the default path that VS Code should open when connecting to the container. This devcontainer sets the default path to **/opt/refinitiv/websocket-api/Applications/Examples/RDP/CSharp** which is the RTO C# examples location in the container.
 - ```mounts```: Add mount points to the container when created for sharing files between the host and devcontainer. I am mounting the ```.vscode``` folder for the C# running/debugging configurations and the ```shareFolder``` to share files between host and devcontainer.
 - ```shutdownAction```: set the VS Code stops the container when the editor window is closed/shut down.
@@ -59,10 +68,11 @@ A Dockerfile for the RTO C# WebSocket examples is as follows:
 # Pulling Image from https://hub.docker.com/r/refinitivapis/websocket_api
 FROM refinitivapis/websocket_api:latest
 LABEL maintainer="Developer Advocate"
+ARG dotnet_version="6.0"
 
 # Install updates, dotnet-sdk and tools for VS Code devcontainer.
 RUN yum update -y \
- && yum -y install dotnet-sdk-2.1 wget tar.x86_64 \
+ && yum -y install dotnet-sdk-${dotnet_version} wget tar.x86_64 which \
  # Clean up unnecessary files to reduce Image size
  && yum clean all
 # Set work directory to be RDP/CSharp
@@ -74,7 +84,7 @@ CMD /bin/bash
 ```
 The above Dockerfile instructions do the following tasks.
 1. Pull refinitivapis/websocket_api as the [Base Image](https://docs.docker.com/glossary/#base-image) with the ```FROM``` instruction.
-2. Install .NET SDK and runtime to the Image (**As of April 2022**: The RTO C# examples support .NET Core *version 2.1*).
+2. Install .NET SDK and runtime to the Image (**As of July 2023**: The RTO C# examples support .NET *version 6.0*).
 3. Install additional packages for VS Code and the Remote - Containers extension.
 4. Set a new working directory to */opt/refinitiv/websocket-api/Applications/Examples/RDP/CSharp* folder with the ```WORKDIR``` instruction.
 
@@ -84,17 +94,23 @@ Please note that you can build and run this Dockerfile with the Docker engine CL
 
 According to the methodology [3rd factor](https://12factor.net/config) of the [Twelve-Factor App methodology](https://12factor.net/), it is a good practice to keep configuration information and credentials as environment variables, then inject them into the application on runtime. 
 
-I am keeping the RTO credentials in a file named ```.env.devcontainer``` file under the ```.devcontainer``` folder as follows:
+I am keeping the RTO credentials (both V1 and [V2 Authentication](https://developers.refinitiv.com/en/article-catalog/article/changes-to-customer-access-and-identity-management--refinitiv-re)) in a file named ```.env.devcontainer``` file under the ```.devcontainer``` folder as follows:
 
+``` INI
+#V 1
+RTO_USERNAME=<Version 1 RTO Machine-ID>
+RTO_PASSWORD=<Version 1 RTO Password>
+RTO_CLIENTID=<Version 1 RTO AppKey>
+#V 2
+RTO_CLIENTID=<Version 2 Client-ID>
+RTO_CLIENTSECRET=<Version 2 Client-Secret>
 ```
-# RTO Credentials
-RTO_USERNAME=<RTO Machine-ID>
-RTO_PASSWORD=<RTO Password>
-RTO_CLIENTID=<RTO AppKey>
-```
+
+Please note that the environment variable file above contains the V1 and V2 Authentication. If you have only V1 or V2, please change the file based on your preference.
+
 Then, we set this ```.env.devcontainer``` file to Docker on runtime with the devcontainer.json's ```"runArgs": ["--env-file=.devcontainer/.env.devcontainer"]``` configuration. Once the devcontainer creation is successful, developers can access RTO credentials via the following methods:
-* In a container's bash: via the ```$<variable name>``` syntax like ```$RTO_USERNAME```
-* In VS Code launch.json: via the ```${env:<variable name>}``` syntax like ```${env:RTO_USERNAME}```
+* In a container's bash: via the ```$<variable name>``` syntax like ```$RTO_USERNAME``` (V1) or ```$RTO_CLIENTID``` (V2)
+* In VS Code launch.json: via the ```${env:<variable name>}``` syntax like ```${env:RTO_USERNAME}``` (V1) or ```${env:RTO_CLIENTID}``` (V2)
 
 ### Caution
 
@@ -108,7 +124,9 @@ VS Code has built-in debugging support for various programming languages. Develo
 
 To set a devcontainer to run and debug the MarketPriceRdpGwServiceDiscoveryExample application with the .NET Core runtime, I am setting a launch.json configuration as follows:
 
-```
+### V1
+
+``` JSON
 {
     "version": "0.2.0",
     "configurations": [
@@ -122,21 +140,59 @@ To set a devcontainer to run and debug the MarketPriceRdpGwServiceDiscoveryExamp
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/MarketPriceRdpGwServiceDiscoveryExample/bin/Debug/netcoreapp2.1/MarketPriceRdpGwServiceDiscoveryExample.dll",
+            "program": "${workspaceFolder}/MarketPriceRdpGwClientCredAuthExample/bin/Debug/net6.0/MarketPriceRdpGwClientCredAuthExample_NET6.0.dll",
             "args": ["--user","${env:RTO_USERNAME}","--password","${env:RTO_PASSWORD}","--clientid","${env:RTO_CLIENTID}","--ric","/EUR="],
-            "cwd": "${workspaceFolder}/MarketPriceRdpGwServiceDiscoveryExample",
-            ...
+            // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
+            "console": "internalConsole",
+            "stopAtEntry": false
         },
-        ...
+        {
+            "name": ".NET Core Attach",
+            "type": "coreclr",
+            "request": "attach"
+        }
     ]
 }
 ```
 
-Please noticed that the ```args``` attribute has been set with the ```["--user","${env:RTO_USERNAME}","--password","${env:RTO_PASSWORD}","--clientid","${env:RTO_CLIENTID}","--ric","/EUR="]``` value. This setting makes VS Code automatic passes the RTO credentials in a devcontainer's environment variables to the MarketPriceRdpGwServiceDiscoveryExample command line options. Developers do not need to manual paste their credentials in a devcontainer anymore.
+### V2
 
-Developers can save their building, packaging, testing, or deploying steps in a tasks configuration file named ```tasks.json``` located in a ```.vscode``` folder of the workspace (project root folder). A tasks.json file for automatic builds of the RTO C# WebSocket CSharpRdpGwExamples_VS150 solution with the following configurations:
+``` JSON
+{
+    "version": "0.2.0",
+    "configurations": [
 
-```{
+        {
+            // Use IntelliSense to find out which attributes exist for C# debugging
+            // Use hover for the description of the existing attributes
+            // For further information visit https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md
+            "name": ".NET Core Launch (console)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            // If you have changed target frameworks, make sure to update the program path.
+            "program": "${workspaceFolder}/MarketPriceRdpGwClientCredAuthExample/bin/Debug/net6.0/MarketPriceRdpGwClientCredAuthExample_NET6.0.dll",
+            "args": ["--clientid","${env:RTO_CLIENTID}","--clientsecret","${env:RTO_CLIENTSECRET}","--ric","/EUR="],
+            "cwd": "${workspaceFolder}/MarketPriceRdpGwClientCredAuthExample",
+            // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
+            "console": "internalConsole",
+            "stopAtEntry": false
+        },
+        {
+            "name": ".NET Core Attach",
+            "type": "coreclr",
+            "request": "attach"
+        }
+    ]
+}
+```
+
+Please noticed that the ```args``` attribute has been set to map a container environment variable to the example application parameters. This setting makes VS Code automatic passes the RTO credentials in a devcontainer's environment variables to the MarketPriceRdpGwServiceDiscoveryExample command line options. Developers do not need to manual paste their credentials in a devcontainer anymore.
+
+Developers can save their building, packaging, testing, or deploying steps in a tasks configuration file named ```tasks.json``` located in a ```.vscode``` folder of the workspace (project root folder). A tasks.json file for automatic builds of the RTO C# WebSocket CSharpRdpGwExamples_NET6.0 solution with the following configurations:
+
+``` JSON
+{
     "version": "2.0.0",
     "tasks": [
         {
@@ -145,7 +201,7 @@ Developers can save their building, packaging, testing, or deploying steps in a 
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/CSharpRdpGwExamples_VS150.sln",
+                "${workspaceFolder}/CSharpRdpGwExamples_NET6.0.sln",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -200,35 +256,16 @@ This devcontainer already has the C# extension built-in and VS Code's launch.jso
 
 ![figure-9](images/09_run_example.png "Run example")
 
-VS Code automatic runs the MarketPriceRdpGwServiceDiscoveryExample application with the ```--user```, ```--password```, ```--clientid```, and ```--ric``` command-line options set in a launch.json file. All RTO credentials are available in the container environment variables, so developers do not need to manually set them. Developers can change the RIC code or add other options in the ```args``` attribute of a launch.json file. 
+VS Code automatic runs the MarketPriceRdpGwServiceDiscoveryExample application with the RTO credentials, and ```--ric``` command-line options set in a launch.json file. All RTO credentials are available in the container environment variables, so developers do not need to manually set them. Developers can change the RIC code or add other options in the ```args``` attribute of a launch.json file. Please find more detail about other options in the solution readme file.
 
-```
-//launch.json file
-{
-    "version": "0.2.0",
-    "configurations": [
+Alternatively, developers can run the example in bash manually via the following steps (I am demonstrating with the V2 Authentication):
 
-        {
-           
-            "name": ".NET Core Launch (console)",
-            ...
-            "args": ["--user","${env:RTO_USERNAME}","--password","${env:RTO_PASSWORD}","--clientid","${env:RTO_CLIENTID}","--ric","/EUR="],
-            ...
-        },
-        ...
-    ]
-}
-```
-Please find more detail about other options in the solution readme file.
+``` bash
+$>dotnet build CSharpRdpGwExamples_NET6.0.sln
 
-Alternatively, developers can run the example in bash manually via the following steps:
+$>cd MarketPriceRdpGwClientCredAuthExample/bin/Debug/net6.0/
 
-```
-$>dotnet build CSharpRdpGwExamples_VS150.sln
-
-$>cd MarketPriceRdpGwServiceDiscoveryExample/bin/Debug/netcoreapp2.1/
-
-$>dotnet MarketPriceRdpGwServiceDiscoveryExample.dll --user $RTO_USERNAME --password $RTO_PASSWORD --clientid $RTO_CLIENTID --ric <RIC Code>
+$>dotnet MarketPriceRdpGwClientCredAuthExample_NET6.0.dll --clientid $RTO_CLIENTID --clientsecret $RTO_CLIENTSECRET --ric <RIC Code>
 ```
 
 ## <a id="run_python"></a>Bonus: Running the WebSocket Python examples
@@ -237,8 +274,8 @@ This C# devcontainer is based on the refinitivapis/websocket_api Docker Image, s
 
 The steps to run the RTO Python WebSocket example are as follows:
 
-```
+``` bash
 $>cd /opt/refinitiv/websocket-api/Applications/Examples/RDP/python
 
-$> python market_price_rdpgw_service_discovery.py --user $RTO_USERNAME --password $RTO_PASSWORD --clientid $RTO_CLIENTID --ric <RIC Code>
+$>python market_price_rdpgw_service_discovery.py --clientid $RTO_CLIENTID --clientsecret $RTO_CLIENTSECRET --ric <RIC Code>
 ```

@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/CSharpRdpGwExamples_VS150.sln",
+                "${workspaceFolder}/CSharpRdpGwExamples_NET6.0.sln",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -19,7 +19,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/CSharpRdpGwExamples_VS150.sln",
+                "${workspaceFolder}/CSharpRdpGwExamples_NET6.0.sln",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -33,7 +33,7 @@
                 "watch",
                 "run",
                 "--project",
-                "${workspaceFolder}/MarketPriceRdpGwServiceDiscoveryExample/MarketPriceRdpGwServiceDiscoveryExample.csproj"
+                "${workspaceFolder}/MarketPriceRdpGwClientCredAuthExample/MarketPriceRdpGwClientCredAuthExample.csproj"
             ],
             "problemMatcher": "$msCompile"
         }

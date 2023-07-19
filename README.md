@@ -1,6 +1,6 @@
 # Develop with Refinitiv WebSocket API Docker Image with C# in VS Code Using the Remote - Containers extension
-- version: 1.0.0
-- Last update: April 2022
+- version: 2.0
+- Last update: July 2023
 - Environment: Docker
 - Compiler: C#
 - Prerequisite: [Demo prerequisite](#prerequisite)
@@ -18,7 +18,9 @@ As part of the Remote Development Extension Pack, the [Remote - Containers](http
 
 ![figure-1](images/01_architecture-containers.png "Visual Studio Code Remote - Containers diagram")
 
-The previous [Article.RTSDK.Java.Cpp.DevContainer](https://github.com/Refinitiv-API-Samples/Article.RTSDK.Java.Cpp.DevContainer) project demonstrates how to use Refinitiv Real-Time SDK Java/C++ Docker Images devcontainer with VS Code Remote - Containers extension. This example project shows how to set up a [.NET](https://dotnet.microsoft.com/en-us/) (to be precise, [.NET Core](https://github.com/dotnet/core)) devcontainer with the Remote - Containers extension to for the Refinitiv Real-Time Optimized (RTO) [C#](https://docs.microsoft.com/en-us/dotnet/csharp/) WebSocket examples [using a Dockerfile](https://code.visualstudio.com/docs/remote/create-dev-container#_dockerfile). This Dockerfile is built on top of the [refinitivapis/websocket_api](https://hub.docker.com/r/refinitivapis/websocket_api) Docker Image and developers can run the RTO C# WebSocket examples codes directly in VS Code.
+The previous [Article.RTSDK.Java.Cpp.DevContainer](https://github.com/Refinitiv-API-Samples/Article.RTSDK.Java.Cpp.DevContainer) project demonstrates how to use Refinitiv Real-Time SDK Java/C++ Docker Images devcontainer with VS Code Remote - Containers extension. This example project shows how to set up a [.NET](https://dotnet.microsoft.com/en-us/) devcontainer with the Remote - Containers extension to for the Refinitiv Real-Time Optimized (RTO) [C#](https://docs.microsoft.com/en-us/dotnet/csharp/) WebSocket examples [using a Dockerfile](https://code.visualstudio.com/docs/remote/create-dev-container#_dockerfile). This Dockerfile is built on top of the [refinitivapis/websocket_api](https://hub.docker.com/r/refinitivapis/websocket_api) Docker Image and developers can run the RTO C# WebSocket examples codes directly in VS Code.
+
+**Update**: The [refinitivapis/websocket_api](https://hub.docker.com/r/refinitivapis/websocket_api) Docker Image has been updated to the current version of [WebSocket API GitHub](https://github.com/Refinitiv/websocket-api) repository. All C# example projects have been update to .NET 6.0.
 
 ## <a id="Introduction"></a>Refinitiv WebSocket API Introduction
 
@@ -64,11 +66,17 @@ This example project contains the following files and folders
 The first step is to unzip or download the example project folder into a directory of your choice, then follow the steps below.
 
 1. Go to the project's *.devcontainer* folder and create a file name ```.env.devcontainer```  with the following content.
+    ``` ini
+    # V1
+    RTO_USERNAME=<Version 1 RTO Machine-ID>
+    RTO_PASSWORD=<Version 1 RTO Password>
+    RTO_CLIENTID=<Version 1 RTO AppKey>
+    # V2
+    RTO_CLIENTID=<Version 2 Client-ID>
+    RTO_CLIENTSECRET=<Version 2 Client-Secret>
     ```
-    RTO_USERNAME=<RTO Machine-ID>
-    RTO_PASSWORD=<RTO Password>
-    RTO_CLIENTID=<RTO AppKey>
-    ```
+    Please note that the environment variable file above contains the V1 and V2 Authentication. If you have only V1 or V2, please change the file based on your preference.
+
 2. Start a Docker desktop or Docker engine on your machine.
 3. Open the project folder in the VS Code editor
 4. Install the [VS Code - Remote Development extension pack](https://aka.ms/vscode-remote/download/extension).
@@ -124,6 +132,7 @@ The [refinitivapis/websocket_api](https://hub.docker.com/r/refinitivapis/websock
 For further details, please review the following resources:
 * [WebSocket API](https://developers.refinitiv.com/en/api-catalog/refinitiv-real-time-opnsrc/refinitiv-websocket-api) on the [Refinitiv Developer Community](https://developers.refinitiv.com/) website.
 * [Refinitiv Real-Time & Distribution Family page](https://developers.refinitiv.com/en/use-cases-catalog/refinitiv-real-time) page.
+* [Changes to Customer Access and Identity Management: Refinitiv Real-Time - Optimized](https://developers.refinitiv.com/en/article-catalog/article/changes-to-customer-access-and-identity-management--refinitiv-re)
 * [Websocket API Quick Start](https://developers.refinitiv.com/en/api-catalog/refinitiv-real-time-opnsrc/refinitiv-websocket-api/quick-start) page.
 * [Developer Article: 10 important things you need to know before you write an Enterprise Real Time application](https://developers.refinitiv.com/article/10-important-things-you-need-know-you-write-elektron-real-time-application) article.
 * [Introduction to the refinitivapis/websocket_api Docker Image](https://developers.refinitiv.com/en/article-catalog/article/introduction-to-the-refinitivapis-websocketapi-docker-image) article.

@@ -11,9 +11,12 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/MarketPriceRdpGwServiceDiscoveryExample/bin/Debug/netcoreapp2.1/MarketPriceRdpGwServiceDiscoveryExample.dll",
-            "args": ["--user","${env:RTO_USERNAME}","--password","${env:RTO_PASSWORD}","--clientid","${env:RTO_CLIENTID}","--ric","/EUR="],
-            "cwd": "${workspaceFolder}/MarketPriceRdpGwServiceDiscoveryExample",
+            "program": "${workspaceFolder}/MarketPriceRdpGwClientCredAuthExample/bin/Debug/net6.0/MarketPriceRdpGwClientCredAuthExample_NET6.0.dll",
+            //V1
+            //"args": ["--user","${env:RTO_USERNAME}","--password","${env:RTO_PASSWORD}","--clientid","${env:RTO_CLIENTID}","--ric","/EUR="],
+            //V2
+            "args": ["--clientid","${env:RTO_CLIENTID}","--clientsecret","${env:RTO_CLIENTSECRET}","--ric","/EUR="],
+            "cwd": "${workspaceFolder}/MarketPriceRdpGwClientCredAuthExample",
             // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
             "console": "internalConsole",
             "stopAtEntry": false

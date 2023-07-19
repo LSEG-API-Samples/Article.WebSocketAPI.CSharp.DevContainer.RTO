@@ -6,7 +6,15 @@
     "runArgs": [
         "--env-file=.devcontainer/.env.devcontainer"
     ],
-    "extensions": ["ms-dotnettools.csharp"],
+    "customizations": {
+        "vscode": {
+            "extensions": ["ms-dotnettools.csharp"],
+            "settings": {
+                "omnisharp.useModernNet": false,
+                "omnisharp.sdkPath": "/usr/bin/dotnet"
+            }
+        }
+      },
     "workspaceFolder": "/opt/refinitiv/websocket-api/Applications/Examples/RDP/CSharp",
     "mounts": [
 		"source=${localWorkspaceFolder}/.vscode,target=${containerWorkspaceFolder}/.vscode,type=bind,consistency=cached",
