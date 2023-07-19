@@ -64,7 +64,7 @@ The refinitivapis/websocket_api Docker Image has the Python runtime and dependen
 
 A Dockerfile for the RTO C# WebSocket examples is as follows:
 
-```
+``` Docker
 # Pulling Image from https://hub.docker.com/r/refinitivapis/websocket_api
 FROM refinitivapis/websocket_api:latest
 LABEL maintainer="Developer Advocate"
